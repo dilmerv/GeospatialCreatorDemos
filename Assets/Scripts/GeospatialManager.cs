@@ -12,6 +12,7 @@ public class GeospatialManager : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI geospatialStatusText;
+
     [SerializeField]
     private AREarthManager earthManager;
 
