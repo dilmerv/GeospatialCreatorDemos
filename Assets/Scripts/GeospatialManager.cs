@@ -25,20 +25,6 @@ public class GeospatialManager : MonoBehaviour
 
     private Coroutine locationServiceLauncher;
 
-    [Header("Streetscape Geometry")]
-    // Streetscape Geometry Features
-    [SerializeField]
-    private ARStreetscapeGeometryManager streetscapeGeometryManager;
-
-    [SerializeField]
-    private Material buildingMaterial;
-
-    [SerializeField]
-    private Material terrainMaterial;
-
-    private Dictionary<TrackableId, GameObject> streetscapeGeometryCached =
-            new Dictionary<TrackableId, GameObject>();
-
     private void Awake()
     {
         // Enable geospatial sample to target 60fps camera capture frame rate
@@ -102,70 +88,14 @@ public class GeospatialManager : MonoBehaviour
     private void OnEnable()
     {
         locationServiceLauncher = StartCoroutine(StartLocationService());
-        streetscapeGeometryManager.StreetscapeGeometriesChanged += StreetscapeGeometriesChanged;
     }
 
     private void OnDisable()
     {
-        streetscapeGeometryManager.StreetscapeGeometriesChanged -= StreetscapeGeometriesChanged;
         StopCoroutine(locationServiceLauncher);
         locationServiceLauncher = null;
         Debug.Log("Stopping location services.");
         Input.location.Stop();
-    }
-
-    private void StreetscapeGeometriesChanged(ARStreetscapeGeometriesChangedEventArgs geometries)
-    {
-        geometries.Added.ForEach(g => AddRenderGeometry(g));
-        geometries.Updated.ForEach(g => UpdateRenderGeometry(g));
-        geometries.Removed.ForEach(g => DestroyRenderGeometry(g));
-    }
-
-    private void AddRenderGeometry(ARStreetscapeGeometry geometry)
-    {
-        if (!streetscapeGeometryCached.ContainsKey(geometry.trackableId))
-        {
-            GameObject renderGeometryObject = new GameObject(
-                "StreetscapeGeometryMesh", typeof(MeshFilter), typeof(MeshRenderer));
-
-            renderGeometryObject.GetComponent<MeshFilter>().mesh = geometry.mesh;
-
-            if (geometry.streetscapeGeometryType == StreetscapeGeometryType.Building)
-            {
-                renderGeometryObject.GetComponent<MeshRenderer>().material =
-                    buildingMaterial;
-            }
-            else
-            {
-                renderGeometryObject.GetComponent<MeshRenderer>().material =
-                    terrainMaterial;
-            }
-
-            renderGeometryObject.transform
-                .SetPositionAndRotation(geometry.pose.position, geometry.pose.rotation);
-
-            streetscapeGeometryCached.Add(geometry.trackableId, renderGeometryObject);
-        }
-    }
-
-    private void UpdateRenderGeometry(ARStreetscapeGeometry geometry)
-    {
-        if (streetscapeGeometryCached.ContainsKey(geometry.trackableId))
-        {
-            GameObject renderGeometryObject = streetscapeGeometryCached[geometry.trackableId];
-            renderGeometryObject.transform.position = geometry.pose.position;
-            renderGeometryObject.transform.rotation = geometry.pose.rotation;
-        }
-    }
-
-    private void DestroyRenderGeometry(ARStreetscapeGeometry geometry)
-    {
-        if (streetscapeGeometryCached.ContainsKey(geometry.trackableId))
-        {
-            var renderGeometryObject = streetscapeGeometryCached[geometry.trackableId];
-            streetscapeGeometryCached.Remove(geometry.trackableId);
-            Destroy(renderGeometryObject);
-        }
     }
 
     private IEnumerator StartLocationService()
