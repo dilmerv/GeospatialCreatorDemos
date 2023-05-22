@@ -138,8 +138,6 @@ public class GeospatialStreetscapeManager : MonoBehaviour
         var touches = Touchscreen.current.touches;
         TouchControl touch = touches[0];
 
-        Debug.Log(touch.phase.value);
-
         if (touch.phase.value == UnityEngine.InputSystem.TouchPhase.Began && allowRay)
         {
             // Raycast against streetscapeGeometry.

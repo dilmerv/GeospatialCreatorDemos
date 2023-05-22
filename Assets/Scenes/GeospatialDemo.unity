@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   streetscapeGeometryManager: {fileID: 1607999995}
-  buildingMaterial: {fileID: 2100000, guid: 377d6ce70dba6440e9adc9a8a88d4aea, type: 2}
-  terrainMaterial: {fileID: 2100000, guid: c382d35557d8d4bfba78640d36639d72, type: 2}
+  buildingMaterial: {fileID: 2100000, guid: bd3290ae5812a4b849016ac5817c4f5b, type: 2}
+  terrainMaterial: {fileID: 2100000, guid: 3545648771f2244f4b5af5c13afe0c9b, type: 2}
   raycastManager: {fileID: 1607999996}
   objectToSpawn: {fileID: 8182956443887353202, guid: 5b72379cd011840e6a45b25425c336b0,
     type: 3}
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: asdasdasda
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
