@@ -8,6 +8,16 @@ using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
+
+public class StreetscapeMenuOptions
+{
+    public bool BuildingsOn { get; set; }
+
+    public bool TerrainsOn { get; set; }
+
+    public bool AnchorsOn { get; set; }
+}
+
 public class GeospatialStreetscapeManager : MonoBehaviour
 {
     [SerializeField]
@@ -23,6 +33,9 @@ public class GeospatialStreetscapeManager : MonoBehaviour
     private ARRaycastManager raycastManager;
 
     [SerializeField]
+    private ARBallShooter cameraARBallShooter;
+
+    [SerializeField]
     private GameObject objectToSpawn;
     
     private Dictionary<TrackableId, GameObject> streetscapeGeometryCached =
@@ -30,67 +43,102 @@ public class GeospatialStreetscapeManager : MonoBehaviour
 
     private static List<XRRaycastHit> hits = new List<XRRaycastHit>();
 
-    private bool allowRay = true;
+    private bool allowPlacement = true;
 
-    private bool geometryVisibility = true;
+    private StreetscapeMenuOptions options = new StreetscapeMenuOptions();
 
     [SerializeField]
-    private Toggle geometryToggle;
+    private Toggle buildingsToggle;
+
+    [SerializeField]
+    private Toggle terrainsToggle;
+
+    [SerializeField]
+    private Toggle anchorsToggle;
+
+    [SerializeField]
+    private Slider projectileSlider;
 
     private void OnEnable()
     {
         streetscapeGeometryManager.StreetscapeGeometriesChanged += StreetscapeGeometriesChanged;
-        geometryToggle.onValueChanged.AddListener((_) =>
+
+        cameraARBallShooter.enableShooting = !anchorsToggle.isOn;
+
+        options.AnchorsOn = anchorsToggle.isOn;
+        options.BuildingsOn = buildingsToggle.isOn;
+        options.TerrainsOn = terrainsToggle.isOn;
+
+        projectileSlider.gameObject.SetActive(!anchorsToggle.isOn);
+
+        buildingsToggle.onValueChanged.AddListener((_) =>
         {
-            geometryVisibility = !geometryVisibility;
-            if(!geometryVisibility)
+            options.BuildingsOn = !options.BuildingsOn;
+            if(!options.BuildingsOn)
             {
                 DestroyAllRenderGeometry();
             }
+        });
+
+        terrainsToggle.onValueChanged.AddListener((_) =>
+        {
+            options.TerrainsOn = !options.TerrainsOn;
+            if (!options.TerrainsOn)
+            {
+                DestroyAllRenderGeometry();
+            }
+        });
+
+        anchorsToggle.onValueChanged.AddListener((_) =>
+        {
+            options.AnchorsOn = !options.AnchorsOn;
+            projectileSlider.gameObject.SetActive(!options.AnchorsOn);
+        });
+
+        projectileSlider.onValueChanged.AddListener((newValue) =>
+        {
+            cameraARBallShooter.force = newValue;
         });
     }
 
     private void OnDisable()
     {
         streetscapeGeometryManager.StreetscapeGeometriesChanged -= StreetscapeGeometriesChanged;
-        geometryToggle.onValueChanged.RemoveAllListeners();
+        anchorsToggle.onValueChanged.RemoveAllListeners();
     }
 
 
     private void StreetscapeGeometriesChanged(ARStreetscapeGeometriesChangedEventArgs geometries)
     {
-        if (geometryVisibility)
-        {
-            geometries.Added.ForEach(g => AddRenderGeometry(g));
-            geometries.Updated.ForEach(g => UpdateRenderGeometry(g));
-            geometries.Removed.ForEach(g => DestroyRenderGeometry(g));
-        }
+        geometries.Added.ForEach(g => AddRenderGeometry(g));
+        geometries.Updated.ForEach(g => UpdateRenderGeometry(g));
+        geometries.Removed.ForEach(g => DestroyRenderGeometry(g));
     }
 
     private void AddRenderGeometry(ARStreetscapeGeometry geometry)
     {
         if (!streetscapeGeometryCached.ContainsKey(geometry.trackableId))
         {
-            GameObject renderGeometryObject = new GameObject(
-                "StreetscapeGeometryMesh", typeof(MeshFilter), typeof(MeshRenderer));
-
-            renderGeometryObject.GetComponent<MeshFilter>().mesh = geometry.mesh;
-
-            if (geometry.streetscapeGeometryType == StreetscapeGeometryType.Building)
+            if ((geometry.streetscapeGeometryType == StreetscapeGeometryType.Building && options.BuildingsOn)
+                ||
+               (geometry.streetscapeGeometryType == StreetscapeGeometryType.Terrain && options.TerrainsOn))
             {
-                renderGeometryObject.GetComponent<MeshRenderer>().material =
-                    buildingMaterial;
-            }
-            else
-            {
-                renderGeometryObject.GetComponent<MeshRenderer>().material =
-                    terrainMaterial;
-            }
 
-            renderGeometryObject.transform
-                .SetPositionAndRotation(geometry.pose.position, geometry.pose.rotation);
+                GameObject renderGeometryObject = new GameObject(
+                    "StreetscapeGeometryMesh", typeof(MeshFilter), typeof(MeshRenderer));
 
-            streetscapeGeometryCached.Add(geometry.trackableId, renderGeometryObject);
+                renderGeometryObject.GetComponent<MeshFilter>().mesh = geometry.mesh;
+
+                renderGeometryObject.GetComponent<MeshRenderer>().material =    
+                       geometry.streetscapeGeometryType == StreetscapeGeometryType.Building ? buildingMaterial : terrainMaterial;
+
+                renderGeometryObject.AddComponent<MeshCollider>();
+
+                renderGeometryObject.transform.position = geometry.pose.position;
+                renderGeometryObject.transform.rotation = geometry.pose.rotation;
+
+                streetscapeGeometryCached.Add(geometry.trackableId, renderGeometryObject);
+            }
         }
     }
 
@@ -137,20 +185,35 @@ public class GeospatialStreetscapeManager : MonoBehaviour
 
         var touches = Touchscreen.current.touches;
         TouchControl touch = touches[0];
+        Vector2 touchPosition = touch.position.ReadValue();
 
-        if (touch.phase.value == UnityEngine.InputSystem.TouchPhase.Began && allowRay)
+        if (!options.AnchorsOn && touch.isInProgress) // shooting from the camera
         {
-            // Raycast against streetscapeGeometry.
-            if (raycastManager.RaycastStreetscapeGeometry(touch.position.ReadValue(), ref hits))
-            {
-                var hitPose = hits[0].pose;
-                Instantiate(objectToSpawn, hitPose.position, hitPose.rotation);
-            }
-            allowRay = false;
+            Debug.Log($"Editor shooting touch simulation at: {touchPosition}");
+            cameraARBallShooter.enableShooting = true;
         }
-        if(touch.phase.value == UnityEngine.InputSystem.TouchPhase.Ended)
+        else // positioning anchors on buildings
         {
-            allowRay = true;
+            cameraARBallShooter.enableShooting = false;
+            if (touch.phase.value == UnityEngine.InputSystem.TouchPhase.Began && allowPlacement)
+            {
+
+#if !UNITY_EDITOR
+                // Raycast against streetscapeGeometry.
+                if (raycastManager.RaycastStreetscapeGeometry(touchPosition, ref hits))
+                {
+                    var hitPose = hits[0].pose;
+                    Instantiate(objectToSpawn, hitPose.position, hitPose.rotation);
+                }
+#else
+                Debug.Log($"Editor anchor touch simulation at: {touchPosition}");
+#endif
+                allowPlacement = false;
+            }
+            if (touch.phase.value == UnityEngine.InputSystem.TouchPhase.Ended)
+            {
+                allowPlacement = true;
+            }
         }
     }
 }
