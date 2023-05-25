@@ -22,12 +22,12 @@ public class ARSemanticImagesManager : MonoBehaviour
         // check for support
         if(semanticManager.IsSemanticModeSupported(SemanticMode.Enabled) == FeatureSupported.Supported)
         {
-            Logger.Instance.LogWarning("Unfortunately Semantic Segmentation is not supported on this device");
+            Logger.Instance.LogWarning("Semantic Segmentation is supported on this device");
+            isSemanticModeAvailable = true;
         }
         else
         {
-            Logger.Instance.LogWarning("Semantic Segmentation is supported on this device");
-            isSemanticModeAvailable = true;
+            Logger.Instance.LogWarning("Unfortunately Semantic Segmentation is not supported on this device");    
         }
     }
 
