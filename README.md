@@ -38,3 +38,4 @@ https://youtu.be/f3kf16TVWMo) explaining all the steps to configure Google's Geo
 
 💡 For a more detailed manual on Geospatial configuration take a look at [Google's ARCore documentation](https://developers.google.com/ar/geospatialcreator/intro)
 
+ℹ️ Credits to [Andy Duboc](https://github.com/andydbc) who provided the amazing [Hologram shaders](https://github.com/andydbc/HologramShader) used in this repo.

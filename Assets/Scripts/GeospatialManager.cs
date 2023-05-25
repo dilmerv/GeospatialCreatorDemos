@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Google.XR.ARCoreExtensions;
 using TMPro;
 using UnityEngine;
@@ -10,6 +11,7 @@ using UnityEngine.XR.ARSubsystems;
 
 public class GeospatialManager : MonoBehaviour
 {
+    [Header("Core Features")]
     [SerializeField]
     private TextMeshProUGUI geospatialStatusText;
 
