@@ -1,15 +1,16 @@
 {
   "dependencies": {
     "com.cesium.unity": {
-      "version": "file:C:/Users/Dilmer/Downloads/com.cesium.unity-1.2.0.tgz",
+      "version": "1.2.0",
       "depth": 0,
-      "source": "local-tarball",
+      "source": "registry",
       "dependencies": {
         "com.unity.mathematics": "1.2.0",
         "com.unity.test-framework": "1.1.31",
         "com.unity.shadergraph": "12.1.6",
         "com.unity.inputsystem": "1.4.2"
-      }
+      },
+      "url": "https://unity.pkg.cesium.com"
     },
     "com.google.ar.core.arfoundation.extensions": {
       "version": "https://github.com/google-ar/arcore-unity-extensions.git",
