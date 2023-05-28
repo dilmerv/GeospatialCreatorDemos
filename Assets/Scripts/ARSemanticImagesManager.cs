@@ -24,6 +24,12 @@ public class ARSemanticImagesManager : MonoBehaviour
     private Slider semanticAlpha;
 
     [SerializeField]
+    private Toggle showSemanticConfidenceImage;
+
+    [SerializeField]
+    private RawImage semanticConfidenceImage;
+
+    [SerializeField]
     private GameObject semanticInfoLayout;
 
     [SerializeField]
@@ -49,6 +55,8 @@ public class ARSemanticImagesManager : MonoBehaviour
 
     private Texture2D inputTexture;
 
+    private Texture2D inputConfidenceTexture;
+
     private Texture2D outputTexture;
 
     private Renderer semanticsLayerQuadRenderer;
@@ -64,6 +72,13 @@ public class ARSemanticImagesManager : MonoBehaviour
             semanticCamera.orthographicSize * 2.0f, 0.1f);
 
         semanticsLayerQuadRenderer = semanticsLayerQuad.GetComponent<Renderer>();
+
+        showSemanticConfidenceImage.onValueChanged.AddListener(v =>
+        {
+            semanticConfidenceImage.gameObject.SetActive(v);
+        });
+
+        semanticConfidenceImage.gameObject.SetActive(showSemanticConfidenceImage.isOn);
 
         StartCoroutine(CheckForSemanticFeatureSupport());
         StartCoroutine(ProcessSemanticsImage());
@@ -166,6 +181,14 @@ public class ARSemanticImagesManager : MonoBehaviour
         if (!semanticManager.TryGetSemanticTexture(ref inputTexture))
         {
             return false;
+        }
+
+        if (showSemanticConfidenceImage.isOn)
+        {
+            if (semanticManager.TryGetSemanticConfidenceTexture(ref inputConfidenceTexture))
+            {
+                semanticConfidenceImage.texture = inputConfidenceTexture;
+            }
         }
 
         ConvertR8ToRGBA32Flipped(ref inputTexture, ref result);

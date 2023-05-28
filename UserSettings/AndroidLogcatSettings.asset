@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "9A311FFAZ006NJ",
         "name": "com.UnityTechnologies.com.unity.template.urpblank",
-        "processId": 20125,
+        "processId": 9324,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -48,6 +48,12 @@
             "deviceId": "9A311FFAZ006NJ",
             "name": "com.UnityTechnologies.com.unity.template.urpblank",
             "processId": 20125,
+            "exited": false
+        },
+        {
+            "deviceId": "9A311FFAZ006NJ",
+            "name": "com.UnityTechnologies.com.unity.template.urpblank",
+            "processId": 9324,
             "exited": false
         }
     ],
