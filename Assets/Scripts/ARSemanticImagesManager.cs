@@ -174,13 +174,6 @@ public class ARSemanticImagesManager : MonoBehaviour
 
     private bool RequestSemanticTexture(ref Texture2D result)
     {
-        FeatureSupported supportedState = semanticManager.IsSemanticModeSupported(SemanticMode.Enabled);
-        
-        if (supportedState != FeatureSupported.Supported)
-        {
-            return false;
-        }
-
         if (!semanticManager.TryGetSemanticTexture(ref inputTexture))
         {
             return false;
@@ -195,6 +188,7 @@ public class ARSemanticImagesManager : MonoBehaviour
         }
 
         ConvertR8ToRGBA32Flipped(ref inputTexture, ref result);
+
         return true;
     }
 
