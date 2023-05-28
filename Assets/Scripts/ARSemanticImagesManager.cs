@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Google.XR.ARCoreExtensions;
@@ -61,25 +60,29 @@ public class ARSemanticImagesManager : MonoBehaviour
 
     private Renderer semanticsLayerQuadRenderer;
 
+    private GameObject semanticConfidenceContainer;
+
+
     private void Awake()
     {
         semanticManager = GetComponent<ARSemanticManager>();
-    }
+        semanticConfidenceContainer = semanticConfidenceImage.transform.parent.gameObject;
 
-    private void Start()
-    {
         semanticsLayerQuad.transform.localScale = new Vector3(semanticCamera.orthographicSize * 2.0f * Screen.width / Screen.height,
             semanticCamera.orthographicSize * 2.0f, 0.1f);
 
         semanticsLayerQuadRenderer = semanticsLayerQuad.GetComponent<Renderer>();
 
-        showSemanticConfidenceImage.onValueChanged.AddListener(v =>
+        showSemanticConfidenceImage.onValueChanged.AddListener(isOn =>
         {
-            semanticConfidenceImage.gameObject.SetActive(v);
+            semanticConfidenceContainer.SetActive(isOn);
         });
 
-        semanticConfidenceImage.gameObject.SetActive(showSemanticConfidenceImage.isOn);
+        semanticConfidenceContainer.SetActive(showSemanticConfidenceImage.isOn);
+    }
 
+    private void Start()
+    {
         StartCoroutine(CheckForSemanticFeatureSupport());
         StartCoroutine(ProcessSemanticsImage());
         StartCoroutine(UpdateSemanticInfo());

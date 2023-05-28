@@ -292,7 +292,7 @@ RectTransform:
   - {fileID: 8137050307400723134}
   - {fileID: 3718715770101113076}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugAreaText: {fileID: 2248800218915583438}
   enableDebug: 1
-  maxLines: 12
+  maxLines: 10
 --- !u!1 &5941999175504134054
 GameObject:
   m_ObjectHideFlags: 0
