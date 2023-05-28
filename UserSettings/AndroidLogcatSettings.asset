@@ -1,0 +1,121 @@
+{
+    "m_SelectedDeviceId": "9A311FFAZ006NJ",
+    "m_SelectedPackage": {
+        "deviceId": "9A311FFAZ006NJ",
+        "name": "com.UnityTechnologies.com.unity.template.urpblank",
+        "processId": 20125,
+        "exited": false
+    },
+    "m_SelectedPriority": 0,
+    "m_KnownPackagesForSerialization": [
+        {
+            "deviceId": "9A311FFAZ006NJ",
+            "name": "com.google.android.apps.nexuslauncher",
+            "processId": 2834,
+            "exited": false
+        },
+        {
+            "deviceId": "9A311FFAZ006NJ",
+            "name": "com.UnityTechnologies.com.unity.template.urpblank",
+            "processId": 15860,
+            "exited": true
+        },
+        {
+            "deviceId": "9A311FFAZ006NJ",
+            "name": "com.UnityTechnologies.com.unity.template.urpblank",
+            "processId": 16450,
+            "exited": true
+        },
+        {
+            "deviceId": "9A311FFAZ006NJ",
+            "name": "com.UnityTechnologies.com.unity.template.urpblank",
+            "processId": 17523,
+            "exited": true
+        },
+        {
+            "deviceId": "9A311FFAZ006NJ",
+            "name": "com.UnityTechnologies.com.unity.template.urpblank",
+            "processId": 18089,
+            "exited": true
+        },
+        {
+            "deviceId": "9A311FFAZ006NJ",
+            "name": "com.UnityTechnologies.com.unity.template.urpblank",
+            "processId": 19183,
+            "exited": false
+        },
+        {
+            "deviceId": "9A311FFAZ006NJ",
+            "name": "com.UnityTechnologies.com.unity.template.urpblank",
+            "processId": 20125,
+            "exited": false
+        }
+    ],
+    "m_Tags": {
+        "m_Entries": [
+            {
+                "m_Name": "Filter by all listed tags",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "No Filter",
+                "m_Selected": true
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Tag Control...",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Unity",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "CRASH",
+                "m_Selected": false
+            }
+        ]
+    },
+    "m_MemoryViewerState": {
+        "MemoryWindowHeight": 300.0,
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "MemoryGroup": 2,
+        "Behavior": 0
+    },
+    "m_FilterOptions": {
+        "m_Filter": "",
+        "m_UseRegularExpressions": false,
+        "m_MatchCase": false
+    },
+    "m_SymbolPaths": [],
+    "m_CaptureVideoSettings": {
+        "TimeLimitEnabled": false,
+        "TimeLimit": 180,
+        "VideoSizeEnabled": false,
+        "VideoSizeX": 1280,
+        "VideoSizeY": 720,
+        "BitRateEnabled": false,
+        "BitRateK": 20000,
+        "DisplayIdEnabled": false,
+        "DisplayId": ""
+    }
+}

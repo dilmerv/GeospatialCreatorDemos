@@ -15,6 +15,8 @@ EditorBuildSettings:
     path: Assets/Scenes/SceneSemanticsDemo.unity
     guid: b32051826a51a4b78af935b74ea04731
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: c84e9f04bfb5140ffb4e02ebf9bbcd6e,
+      type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 80a63ce761902a7469b3b3c88a0aa733,
       type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: d73c104c8df2fd548b8b611f33315d58,
