@@ -83,112 +83,33 @@ public class ARSemanticImagesManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(CheckForSemanticFeatureSupport());
-        StartCoroutine(ProcessSemanticsImage());
-        StartCoroutine(UpdateSemanticInfo());
-    }
-
-    private IEnumerator UpdateSemanticInfo()
-    {
-        while (true)
-        {
-            foreach(LabelMapping labelMapping in mappings)
-            {
-                GameObject ui = null;
-                if(!semanticInfos.ContainsKey(labelMapping.label))
-                {
-                    ui = Instantiate(semanticInfoPrefab, Vector3.zero,
-                        Quaternion.identity, semanticInfoLayout.transform);
-                    semanticInfos.Add(labelMapping.label, ui);
-                }
-                else
-                {
-                    ui = semanticInfos[labelMapping.label];
-                }
-
-                var image = ui.GetComponentInChildren<Image>();
-                var label = ui.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-                var percent = ui.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
-
-                float probability = 0;
-
-                if(isSemanticModeAvailable)
-                    probability = semanticManager.GetSemanticLabelFraction(labelMapping.label);
-
-                image.color = labelMapping.color;
-                label.text = $"{labelMapping.label}";
-                percent.text = $"{probability * 100:F0}%";
-            }
-            yield return new WaitForSeconds(semanticInfoInterval);
-        }
+        //StartCoroutine(CheckForSemanticFeatureSupport());
+        //StartCoroutine(ProcessSemanticsImage());
+        //StartCoroutine(UpdateSemanticInfo());
     }
 
     private IEnumerator CheckForSemanticFeatureSupport()
     {
-        int checkForSupportAttempts = 0;
+        //TODO - to be implemented
+        yield return null;
+    }
 
-        while(true)
-        {
-            if (semanticManager.IsSemanticModeSupported(SemanticMode.Enabled) == FeatureSupported.Supported)
-            {
-                Logger.Instance.LogWarning($"(Attempt#{checkForSupportAttempts}) Segmentation is supported");
-                isSemanticModeAvailable = true;
-                break;
-            }
-            else
-            {
-                Logger.Instance.LogWarning($"(Attempt#{checkForSupportAttempts}) Segmentation is not supported");
-                checkForSupportAttempts++;
-            }
-
-            if (checkForSupportAttempts >= maxAttempts)
-                break;
-
-            yield return new WaitForSeconds(checkForSupportFrequency);
-        }
+    private IEnumerator UpdateSemanticInfo()
+    {
+        //TODO - to be implemented
+        yield return null;
     }
 
     private IEnumerator ProcessSemanticsImage()
     {
-        while(true)
-        {
-            if (!isSemanticModeAvailable)
-                yield return null;
-
-            var material = semanticsLayerQuadRenderer.material;
-
-            if (RequestSemanticTexture(ref outputTexture))
-            {
-                material.SetTexture(TextureId, outputTexture);
-                material.SetColor(ColorId, Color.white);
-            }
-            else
-            {
-                material.SetTexture(TextureId, null);
-                material.SetColor(ColorId, new Color(0f, 0f, 0f, semanticAlpha.value));
-            }
-
-            yield return new WaitForSeconds(semanticImageInterval);
-        }
+        //TODO - to be implemented
+        yield return null;
     }
 
     private bool RequestSemanticTexture(ref Texture2D result)
     {
-        if (!semanticManager.TryGetSemanticTexture(ref inputTexture))
-        {
-            return false;
-        }
-
-        if (showSemanticConfidenceImage.isOn)
-        {
-            if (semanticManager.TryGetSemanticConfidenceTexture(ref inputConfidenceTexture))
-            {
-                semanticConfidenceImage.texture = inputConfidenceTexture;
-            }
-        }
-
-        ConvertR8ToRGBA32Flipped(ref inputTexture, ref result);
-
+        //TODO - to be implemented
+        result = new Texture2D(0,0);
         return true;
     }
 
