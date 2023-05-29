@@ -8,9 +8,6 @@ using UnityEngine.XR.ARFoundation;
 public class ARPaintManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject arPoint = null;
-
-    [SerializeField]
     private float distanceFromCamera = 0.5f;
 
     [SerializeField]
@@ -19,12 +16,13 @@ public class ARPaintManager : MonoBehaviour
     [SerializeField]
     private LineSettings lineSettings = null;
 
+    [SerializeField]
+    private GameObject arAnchor = null;
+
     private ARAnchorManager anchorManager = null;
     private ARPlaneManager planeManager = null;
 
-    private List<ARAnchor> anchors = new List<ARAnchor>();
-
-    private Dictionary<int, ARLine> Lines = new Dictionary<int, ARLine>();
+    private Dictionary<int, ARLine> Lines = new();
 
     private bool canDraw = false;
 
@@ -67,8 +65,8 @@ public class ARPaintManager : MonoBehaviour
 
         if (touch.phase == TouchPhase.Began)
         {
-            ARAnchor anchor = anchorManager.AddAnchor(new Pose(touchPosition, Quaternion.identity));
-            anchors.Add(anchor);
+            GameObject anchorObj = Instantiate(arAnchor, touchPosition, Quaternion.identity);
+            ARAnchor anchor = anchorObj.GetComponent<ARAnchor>();
 
             ARLine line = new ARLine(lineSettings);
             Lines.Add(touch.fingerId, line);

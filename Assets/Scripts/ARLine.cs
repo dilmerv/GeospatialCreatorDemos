@@ -10,7 +10,7 @@ public class ARLine
 
     private LineRenderer LineRenderer { get; set; }
 
-    private LineSettings settings;
+    private LineSettings settings = null;
 
     public ARLine(LineSettings settings)
     {

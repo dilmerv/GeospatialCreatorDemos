@@ -606,6 +606,7 @@ GameObject:
   - component: {fileID: 1658855194}
   - component: {fileID: 1658855193}
   - component: {fileID: 1658855192}
+  - component: {fileID: 1658855197}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -625,10 +626,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7be87fdda59564767b0f895166a75423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arPoint: {fileID: 2465457054908244101, guid: a366c6ae923b947f4b2b8f11c6d11ddd, type: 3}
   distanceFromCamera: 0.5
   arCamera: {fileID: 853505899}
   lineSettings: {fileID: 11400000, guid: bd0ce03e1f0294d69bcad1e6e3858020, type: 2}
+  arAnchor: {fileID: 7374385126200667412, guid: 7d859478b47aa4c469016c8dd6185efe,
+    type: 3}
 --- !u!114 &1658855193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -690,3 +692,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1658855197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658855191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa850fbd5b8aded44846f96e35f1a9f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
