@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation;
 
-[RequireComponent(typeof(ARAnchorManager))]
+[RequireComponent(typeof(ARAnchorManager), typeof(ARPlaneManager))]
 public class ARPaintManager : MonoBehaviour
 {
     [SerializeField]
@@ -20,16 +20,28 @@ public class ARPaintManager : MonoBehaviour
     private LineSettings lineSettings = null;
 
     private ARAnchorManager anchorManager = null;
+    private ARPlaneManager planeManager = null;
 
     private List<ARAnchor> anchors = new List<ARAnchor>();
 
     private Dictionary<int, ARLine> Lines = new Dictionary<int, ARLine>();
 
-    private bool CanDraw { get; set; }
+    private bool canDraw = false;
 
     private void Awake()
     {
         anchorManager = GetComponent<ARAnchorManager>();
+        planeManager = GetComponent<ARPlaneManager>();
+    }
+
+    private void OnEnable()
+    {
+        planeManager.planesChanged += PlaneDetected;
+    }
+
+    private void OnDisable()
+    {
+        planeManager.planesChanged -= PlaneDetected;
     }
 
     private void Update()
@@ -37,30 +49,26 @@ public class ARPaintManager : MonoBehaviour
         DrawOnTouch();
     }
 
-    private void Paint()
+    private void PlaneDetected(ARPlanesChangedEventArgs args)
     {
-        if (Input.touchCount > 0)
-        {
-            Vector3 placementPosition = arCamera.transform.position + arCamera.transform.forward * distanceFromCamera;
-            Instantiate(arPoint, placementPosition, Quaternion.identity);
-            Debug.Log("Stroke placed");
-        }
+        canDraw = true;
+        Debug.Log("Plane detected");
     }
 
-    void DrawOnTouch()
+    private void DrawOnTouch()
     {
+        if(!canDraw || Input.touchCount <= 0)
+        {
+            return;
+        }
+
         Touch touch = Input.GetTouch(0);
         Vector3 touchPosition = arCamera.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, distanceFromCamera));
 
         if (touch.phase == TouchPhase.Began)
         {
             ARAnchor anchor = anchorManager.AddAnchor(new Pose(touchPosition, Quaternion.identity));
-            if (anchor == null)
-                Debug.LogError("Error creating reference point");
-            else
-            {
-                anchors.Add(anchor);
-            }
+            anchors.Add(anchor);
 
             ARLine line = new ARLine(lineSettings);
             Lines.Add(touch.fingerId, line);
