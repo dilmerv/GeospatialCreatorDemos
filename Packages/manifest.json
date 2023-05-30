@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.cesium.unity": "file:C:/Users/Dilmer/Downloads/com.cesium.unity-1.2.0.tgz",
+    "com.cesium.unity": "1.2.0",
     "com.google.ar.core.arfoundation.extensions": "https://github.com/google-ar/arcore-unity-extensions.git",
     "com.unity.collab-proxy": "2.0.3",
     "com.unity.ide.rider": "3.0.18",
@@ -47,5 +47,14 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Cesium",
+      "url": "https://unity.pkg.cesium.com",
+      "scopes": [
+        "com.cesium.unity"
+      ]
+    }
+  ]
 }
