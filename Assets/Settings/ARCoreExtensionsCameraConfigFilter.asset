@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269129ba34e5b43d5aac34839ce7f646, type: 3}
   m_Name: ARCoreExtensionsCameraConfigFilter
   m_EditorClassIdentifier: 
-  TargetCameraFramerate: 3
+  TargetCameraFramerate: 1
   DepthSensorUsage: 3
   StereoCameraUsage: 3
