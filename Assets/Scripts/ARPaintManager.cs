@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.XR.ARCoreExtensions;
+using Google.XR.ARCoreExtensions.GeospatialCreator.Internal;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 [RequireComponent(typeof(ARAnchorManager), typeof(ARPlaneManager))]
 public class ARPaintManager : MonoBehaviour
@@ -19,15 +22,22 @@ public class ARPaintManager : MonoBehaviour
     [SerializeField]
     private GameObject arAnchor = null;
 
+    [SerializeField]
+    private GameObject arSpatialAnchor = null;
+
+    [SerializeField]
+    private AREarthManager earthManager = null;
+
     private ARAnchorManager anchorManager = null;
     private ARPlaneManager planeManager = null;
 
-    private Dictionary<int, ARLine> Lines = new();
+    private Dictionary<int, ARLine> Lines;
 
     private bool canDraw = false;
 
     private void Awake()
     {
+        Lines = new Dictionary<int, ARLine>();
         anchorManager = GetComponent<ARAnchorManager>();
         planeManager = GetComponent<ARPlaneManager>();
     }
@@ -50,7 +60,6 @@ public class ARPaintManager : MonoBehaviour
     private void PlaneDetected(ARPlanesChangedEventArgs args)
     {
         canDraw = true;
-        Debug.Log("Plane detected");
     }
 
     private void DrawOnTouch()
@@ -68,16 +77,30 @@ public class ARPaintManager : MonoBehaviour
             GameObject anchorObj = Instantiate(arAnchor, touchPosition, Quaternion.identity);
             ARAnchor anchor = anchorObj.GetComponent<ARAnchor>();
 
+            //GameObject spatialAnchorObj = Instantiate(arSpatialAnchor, touchPosition, Quaternion.identity);
+            //ARGeospatialCreatorAnchor spatialAnchor = spatialAnchorObj.GetComponent<ARGeospatialCreatorAnchor>();
+
+            //var pose = earthManager.EarthState == EarthState.Enabled &&
+            //    earthManager.EarthTrackingState == TrackingState.Tracking ?
+            //    earthManager.CameraGeospatialPose : new GeospatialPose();
+
+            //spatialAnchor.Altitude = pose.Altitude;
+            //spatialAnchor.Latitude = pose.Latitude;
+            //spatialAnchor.Longitude = pose.Longitude;
+
             ARLine line = new ARLine(lineSettings);
+            Debug.Log("Line 1");
             Lines.Add(touch.fingerId, line);
             line.AddNewLineRenderer(transform, anchor, touchPosition);
         }
         else if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
         {
+            Debug.Log("Line 2");
             Lines[touch.fingerId].AddPoint(touchPosition);
         }
         else if (touch.phase == TouchPhase.Ended)
         {
+            Debug.Log("Line 3");
             Lines.Remove(touch.fingerId);
         }
 
