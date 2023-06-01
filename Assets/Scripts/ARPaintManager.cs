@@ -23,9 +23,6 @@ public class ARPaintManager : MonoBehaviour
     private GameObject arAnchor = null;
 
     [SerializeField]
-    private GameObject arSpatialAnchor = null;
-
-    [SerializeField]
     private AREarthManager earthManager = null;
 
     private ARAnchorManager anchorManager = null;
@@ -77,30 +74,36 @@ public class ARPaintManager : MonoBehaviour
             GameObject anchorObj = Instantiate(arAnchor, touchPosition, Quaternion.identity);
             ARAnchor anchor = anchorObj.GetComponent<ARAnchor>();
 
-            //GameObject spatialAnchorObj = Instantiate(arSpatialAnchor, touchPosition, Quaternion.identity);
-            //ARGeospatialCreatorAnchor spatialAnchor = spatialAnchorObj.GetComponent<ARGeospatialCreatorAnchor>();
-
-            //var pose = earthManager.EarthState == EarthState.Enabled &&
-            //    earthManager.EarthTrackingState == TrackingState.Tracking ?
-            //    earthManager.CameraGeospatialPose : new GeospatialPose();
-
-            //spatialAnchor.Altitude = pose.Altitude;
-            //spatialAnchor.Latitude = pose.Latitude;
-            //spatialAnchor.Longitude = pose.Longitude;
-
             ARLine line = new ARLine(lineSettings);
-            Debug.Log("Line 1");
             Lines.Add(touch.fingerId, line);
             line.AddNewLineRenderer(transform, anchor, touchPosition);
+
+            if(earthManager == null)
+            {
+                Debug.Log("AREarthManager cannot be null");
+                return;
+            }
+
+            ARGeospatialCreatorAnchor spatialAnchor = anchorObj.AddComponent<ARGeospatialCreatorAnchor>();
+
+            var pose = (earthManager.EarthState == EarthState.Enabled && earthManager.EarthTrackingState == TrackingState.Tracking)
+                ? earthManager.CameraGeospatialPose : new GeospatialPose();
+
+            Debug.Log($"Spatial anchor created");
+
+            spatialAnchor.Altitude = pose.Altitude;
+            spatialAnchor.Latitude = pose.Latitude;
+            spatialAnchor.Longitude = pose.Longitude;
+
+            Debug.Log($"Spatial anchor placed at. Lat: {spatialAnchor.Latitude}, Long: {spatialAnchor.Longitude}, Alt: {spatialAnchor.Altitude}");
+
         }
         else if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
         {
-            Debug.Log("Line 2");
             Lines[touch.fingerId].AddPoint(touchPosition);
         }
         else if (touch.phase == TouchPhase.Ended)
         {
-            Debug.Log("Line 3");
             Lines.Remove(touch.fingerId);
         }
 

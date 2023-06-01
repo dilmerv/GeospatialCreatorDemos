@@ -529,12 +529,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _originAuthority: 0
-  _latitude: 39.73640228958538
-  _longitude: -105.25737597243483
-  _height: 2250.254169644528
-  _ecefX: -1292935.0164742158
-  _ecefY: -4740026.069741997
-  _ecefZ: 4056960.423962447
+  _latitude: 49.28259084237197
+  _longitude: -123.10707495908261
+  _height: 0
+  _ecefX: -2276947.5811616653
+  _ecefY: -3491887.9426930426
+  _ecefZ: 4811118.549782835
   _scale: 1
 --- !u!114 &1163424796
 MonoBehaviour:
@@ -615,8 +615,7 @@ MonoBehaviour:
   lineSettings: {fileID: 11400000, guid: bd0ce03e1f0294d69bcad1e6e3858020, type: 2}
   arAnchor: {fileID: 7374385126200667412, guid: 7d859478b47aa4c469016c8dd6185efe,
     type: 3}
-  arSpatialAnchor: {fileID: 0}
-  earthManager: {fileID: 0}
+  earthManager: {fileID: 1660219251}
 --- !u!114 &1660219250
 MonoBehaviour:
   m_ObjectHideFlags: 0
