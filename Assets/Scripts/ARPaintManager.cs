@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Google.XR.ARCoreExtensions;
 using Google.XR.ARCoreExtensions.GeospatialCreator.Internal;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -61,51 +64,66 @@ public class ARPaintManager : MonoBehaviour
 
     private void DrawOnTouch()
     {
-        if(!canDraw || Input.touchCount <= 0)
+        if (!canDraw)
         {
             return;
         }
 
-        Touch touch = Input.GetTouch(0);
-        Vector3 touchPosition = arCamera.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, distanceFromCamera));
+        var touches = Touchscreen.current.touches;
 
-        if (touch.phase == TouchPhase.Began)
+        if (touches.Count <= 0)
+        {
+            return;
+        }
+
+        TouchControl touch = touches[0];
+        Vector2 touchPositionVal = touch.position.ReadValue();
+        Vector3 touchPosition = arCamera.ScreenToWorldPoint(new Vector3(touchPositionVal.x, touchPositionVal.y, distanceFromCamera));
+
+        int touchId = touch.touchId.value;
+
+        if (touch.phase.value == UnityEngine.InputSystem.TouchPhase.Began)
         {
             GameObject anchorObj = Instantiate(arAnchor, touchPosition, Quaternion.identity);
             ARAnchor anchor = anchorObj.GetComponent<ARAnchor>();
 
             ARLine line = new ARLine(lineSettings);
-            Lines.Add(touch.fingerId, line);
-            line.AddNewLineRenderer(transform, anchor, touchPosition);
-
-            if(earthManager == null)
+            if (Lines.ContainsKey(touchId))
             {
-                Debug.Log("AREarthManager cannot be null");
-                return;
+                Lines[touchId].AddPoint(touchPosition);
             }
+            else
+            {
+                Lines.Add(touchId, line);
+                line.AddNewLineRenderer(transform, anchor, touchPosition);
 
-            ARGeospatialCreatorAnchor spatialAnchor = anchorObj.AddComponent<ARGeospatialCreatorAnchor>();
+                if (earthManager == null)
+                {
+                    Debug.Log("AREarthManager cannot be null");
+                    return;
+                }
 
-            var pose = (earthManager.EarthState == EarthState.Enabled && earthManager.EarthTrackingState == TrackingState.Tracking)
-                ? earthManager.CameraGeospatialPose : new GeospatialPose();
+                ARGeospatialCreatorAnchor spatialAnchor = anchorObj.AddComponent<ARGeospatialCreatorAnchor>();
 
-            Debug.Log($"Spatial anchor created");
+                var pose = (earthManager.EarthState == EarthState.Enabled && earthManager.EarthTrackingState == TrackingState.Tracking)
+                    ? earthManager.CameraGeospatialPose : new GeospatialPose();
 
-            spatialAnchor.Altitude = pose.Altitude;
-            spatialAnchor.Latitude = pose.Latitude;
-            spatialAnchor.Longitude = pose.Longitude;
+                Debug.Log($"Spatial anchor created");
 
-            Debug.Log($"Spatial anchor placed at. Lat: {spatialAnchor.Latitude}, Long: {spatialAnchor.Longitude}, Alt: {spatialAnchor.Altitude}");
+                spatialAnchor.Altitude = pose.Altitude;
+                spatialAnchor.Latitude = pose.Latitude;
+                spatialAnchor.Longitude = pose.Longitude;
 
+                Debug.Log($"Spatial anchor placed at. Lat: {spatialAnchor.Latitude}, Long: {spatialAnchor.Longitude}, Alt: {spatialAnchor.Altitude}");
+            }
         }
-        else if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
+        else if (touch.isInProgress)
         {
-            Lines[touch.fingerId].AddPoint(touchPosition);
+            Lines[touchId].AddPoint(touchPosition);
         }
-        else if (touch.phase == TouchPhase.Ended)
+        else if (touch.phase.value == UnityEngine.InputSystem.TouchPhase.Ended)
         {
-            Lines.Remove(touch.fingerId);
+            Lines.Remove(touchId);
         }
-
     }
 }
