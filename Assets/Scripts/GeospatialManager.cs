@@ -71,18 +71,21 @@ public class GeospatialManager : MonoBehaviour
             earthManager.CameraGeospatialPose : new GeospatialPose();
         var supported = earthManager.IsGeospatialModeSupported(GeospatialMode.Enabled);
 
-        geospatialStatusText.text =
-            $"SessionState: {ARSession.state}\n" +
-            $"LocationServiceStatus: {Input.location.status}\n" +
-            $"FeatureSupported: {supported}\n" +
-            $"EarthState: {earthManager.EarthState}\n" +
-            $"EarthTrackingState: {earthManager.EarthTrackingState}\n" +
-            $"  LAT/LNG: {pose.Latitude:F6}, {pose.Longitude:F6}\n" +
-            $"  HorizontalAcc: {pose.HorizontalAccuracy:F6}\n" +
-            $"  ALT: {pose.Altitude:F2}\n" +
-            $"  VerticalAcc: {pose.VerticalAccuracy:F2}\n" +
-            $"  EunRotation: {pose.EunRotation:F2}\n" +
-            $"  OrientationYawAcc: {pose.OrientationYawAccuracy:F2}";
+        if(geospatialStatusText != null)
+        {
+            geospatialStatusText.text =
+                $"SessionState: {ARSession.state}\n" +
+                $"LocationServiceStatus: {Input.location.status}\n" +
+                $"FeatureSupported: {supported}\n" +
+                $"EarthState: {earthManager.EarthState}\n" +
+                $"EarthTrackingState: {earthManager.EarthTrackingState}\n" +
+                $"  LAT/LNG: {pose.Latitude:F6}, {pose.Longitude:F6}\n" +
+                $"  HorizontalAcc: {pose.HorizontalAccuracy:F6}\n" +
+                $"  ALT: {pose.Altitude:F2}\n" +
+                $"  VerticalAcc: {pose.VerticalAccuracy:F2}\n" +
+                $"  EunRotation: {pose.EunRotation:F2}\n" +
+                $"  OrientationYawAcc: {pose.OrientationYawAccuracy:F2}";
+        }
     }
 
     private void OnEnable()

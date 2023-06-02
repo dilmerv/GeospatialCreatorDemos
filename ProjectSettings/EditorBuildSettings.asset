@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/StreetscapeDemo.unity
     guid: 316cdceacfad44e5db35b67ee417f01f
   - enabled: 1
+    path: Assets/Scenes/ARPaintDemo.unity
+    guid: 5af13868dea66426eb4d3221b16c3c6a
+  - enabled: 0
     path: Assets/Scenes/SceneSemanticsDemo.unity
     guid: b32051826a51a4b78af935b74ea04731
   m_configObjects:
